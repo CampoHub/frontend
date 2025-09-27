@@ -1,12 +1,39 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import './App.css'
 
-function App() {
-  const [showMore, setShowMore] = useState(false)
+// Componentes de PrimeReact
+import 'primereact/resources/themes/lara-light-indigo/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
+
+import LoginForm from './layouts/auth/LoginForm';
+import RegisterForm from './layouts/auth/RegisterForm';
+import { AuthProvider } from './context/AuthContext';
+
+const Home = () => {
+  const [showMore, setShowMore] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const offset = window.scrollY;
+      if (offset > 50) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
     <div className="landing-page">
-      <header className="header">
+      <header className={`header ${scrolled ? 'scrolled' : ''}`}>
         <div className="logo-container">
           <h1 className="logo">Campo<span>Hub</span></h1>
         </div>
@@ -18,8 +45,12 @@ function App() {
           </ul>
         </nav>
         <div className="auth-buttons">
-          <button className="btn login-btn">Iniciar Sesión</button>
-          <button className="btn signup-btn">Registrarse</button>
+          <Link to="/inicio-sesion" className="btn login-btn">Iniciar Sesión
+          </Link>
+          <Link to="/registro" className="btn login-btn">
+            Registrarse
+          </Link>
+          {/* <button className="btn signup-btn">Registrarse</button> */}
         </div>
       </header>
 
@@ -36,6 +67,7 @@ function App() {
 
       <section id="features" className="features">
         <h2>Características Principales</h2>
+        <p className="features-intro">Descubra cómo CampoHub puede ayudarle a optimizar la gestión de su campo con estas funcionalidades esenciales.</p>
         <div className="features-grid">
           <div className="feature-card">
             <div className="feature-icon">🌱</div>
@@ -62,6 +94,7 @@ function App() {
 
       <section id="benefits" className="benefits">
         <h2>Beneficios</h2>
+        <p className="benefits-intro">Al implementar CampoHub en su operación agrícola, obtendrá ventajas competitivas significativas.</p>
         <div className="benefits-container">
           <div className="benefit">
             <h3>Aumento de Productividad</h3>
@@ -76,20 +109,18 @@ function App() {
             <p>Acceda a datos precisos y actualizados para tomar las mejores decisiones para su campo.</p>
           </div>
         </div>
-        {showMore && (
-          <div className="additional-benefits">
-            <div className="benefit">
-              <h3>Trazabilidad Completa</h3>
-              <p>Seguimiento detallado de todas las actividades y recursos utilizados en cada parcela.</p>
-            </div>
-            <div className="benefit">
-              <h3>Acceso Desde Cualquier Lugar</h3>
-              <p>Sistema basado en la nube accesible desde computadoras, tablets y smartphones.</p>
-            </div>
+        <div className={`additional-benefits ${showMore ? 'active' : ''}`}>
+          <div className="benefit">
+            <h3>Trazabilidad Completa</h3>
+            <p>Seguimiento detallado de todas las actividades y recursos utilizados en cada parcela.</p>
           </div>
-        )}
+          <div className="benefit">
+            <h3>Acceso Desde Cualquier Lugar</h3>
+            <p>Sistema basado en la nube accesible desde computadoras, tablets y smartphones.</p>
+          </div>
+        </div>
         <button 
-          className="btn show-more-btn" 
+          className={`btn show-more-btn ${showMore ? 'active' : ''}`} 
           onClick={() => setShowMore(!showMore)}
         >
           {showMore ? 'Ver menos' : 'Ver más beneficios'}
@@ -98,6 +129,7 @@ function App() {
 
       <section id="testimonials" className="testimonials">
         <h2>Lo que dicen nuestros clientes</h2>
+        <p className="testimonials-intro">Empresas agrícolas de todo el país confían en CampoHub para mejorar su productividad y rentabilidad.</p>
         <div className="testimonial-slider">
           <div className="testimonial">
             <p>"CampoHub ha transformado completamente la manera en que administramos nuestra finca. La organización y eficiencia han mejorado notablemente."</p>
@@ -117,17 +149,25 @@ function App() {
         <p>Contáctenos hoy mismo para una demostración personalizada.</p>
         <div className="contact-form">
           <div className="form-group">
-            <input type="text" placeholder="Nombre" />
-            <input type="email" placeholder="Correo electrónico" />
+            <div className="input-container">
+              <input type="text" placeholder="Nombre" />
+            </div>
+            <div className="input-container">
+              <input type="email" placeholder="Correo electrónico" />
+            </div>
           </div>
           <div className="form-group">
-            <input type="text" placeholder="Teléfono" />
-            <select>
-              <option value="" disabled selected>Tamaño del campo</option>
-              <option value="small">Pequeño (menos de 50 hectáreas)</option>
-              <option value="medium">Mediano (50-200 hectáreas)</option>
-              <option value="large">Grande (más de 200 hectáreas)</option>
-            </select>
+            <div className="input-container">
+              <input type="text" placeholder="Teléfono" />
+            </div>
+            <div className="input-container">
+              <select>
+                <option value="" disabled selected>Tamaño del campo</option>
+                <option value="small">Pequeño (menos de 50 hectáreas)</option>
+                <option value="medium">Mediano (50-200 hectáreas)</option>
+                <option value="large">Grande (más de 200 hectáreas)</option>
+              </select>
+            </div>
           </div>
           <textarea placeholder="Mensaje"></textarea>
           <button className="btn submit-btn">Enviar consulta</button>
@@ -152,8 +192,8 @@ function App() {
           </div>
           <div className="footer-contact">
             <h3>Contacto</h3>
-            <p>Email: info@campohub.com</p>
-            <p>Teléfono: +54 9 11 1234-5678</p>
+            <p>info@campohub.com</p>
+            <p>+54 9 11 1234-5678</p>
             <div className="social-icons">
               <a href="#" className="social-icon">📱</a>
               <a href="#" className="social-icon">📘</a>
@@ -166,7 +206,23 @@ function App() {
         </div>
       </footer>
     </div>
-  )
+  );
+};
+
+// Componente App con la estructura correcta
+function App() {
+  return (
+    <Router>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/inicio-sesion" element={<LoginForm />} />
+          <Route path="/registro" element={<RegisterForm />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </AuthProvider>
+    </Router>
+  );
 }
 
 export default App
