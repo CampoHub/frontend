@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { useState, useEffect, useContext } from 'react'
+import { BrowserRouter as Router, Routes, Route, Link, Navigate, Outlet } from 'react-router-dom';
 import './App.css'
 
 // Componentes de PrimeReact
@@ -9,7 +9,20 @@ import 'primeicons/primeicons.css';
 
 import LoginForm from './layouts/auth/LoginForm';
 import RegisterForm from './layouts/auth/RegisterForm';
-import { AuthProvider } from './context/AuthContext';
+import Dashboard from './layouts/dashboard/Dashboard';
+import { AuthProvider, AuthContext } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
+
+// Componente para rutas protegidas
+const ProtectedRoute = () => {
+  const { user } = useContext(AuthContext);
+  
+  if (!user) {
+    return <Navigate to="/inicio-sesion" replace />;
+  }
+  
+  return <Outlet />;
+};
 
 const Home = () => {
   const [showMore, setShowMore] = useState(false);
@@ -213,14 +226,28 @@ const Home = () => {
 function App() {
   return (
     <Router>
-      <AuthProvider>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/inicio-sesion" element={<LoginForm />} />
-          <Route path="/registro" element={<RegisterForm />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/inicio-sesion" element={<LoginForm />} />
+            <Route path="/registro" element={<RegisterForm />} />
+            
+            {/* Rutas protegidas */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/parcelas" element={<Dashboard />} />
+              <Route path="/actividades" element={<Dashboard />} />
+              <Route path="/trabajadores" element={<Dashboard />} />
+              <Route path="/recursos" element={<Dashboard />} />
+              <Route path="/perfil" element={<Dashboard />} />
+              <Route path="/configuracion" element={<Dashboard />} />
+            </Route>
+            
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </AuthProvider>
+      </ThemeProvider>
     </Router>
   );
 }
