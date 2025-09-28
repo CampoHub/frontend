@@ -24,7 +24,7 @@ const LoginForm = () => {
     const onSubmitLogin = async (values) => {
         try {
             await login(values);
-            // Redirigir al panel de control después del inicio de sesión exitoso
+            // Redirigir al dashboard después del inicio de sesión exitoso
             navigate('/dashboard');
         } catch (error) {
             console.error("Error durante el inicio de sesión:", error);
