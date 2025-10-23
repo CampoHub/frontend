@@ -20,10 +20,12 @@ export const AuthProvider = ({children}) =>{
 
             return{
                 id: decoded.user.id,
-                name: decoded.user.name,
-                email: decoded.user.email,
-                age: decoded.user.age,
-                role: decoded.user.role
+                name: decoded.user.nombre,
+                email: decoded.user.correo,
+                isActive: decoded.user.is_active,
+                role: decoded.user.rol,
+                createdAt: decoded.user.createdAt,
+                updatedAt: decoded.user.updatedAt,
             }
         } catch {
             return null
