@@ -12,15 +12,17 @@ import RegisterForm from './layouts/auth/RegisterForm';
 import Dashboard from './layouts/dashboard/Dashboard';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { PlotsProvider } from './context/PlotsContext';
+import Plots from './components/Plots';
 
 // Componente para rutas protegidas
 const ProtectedRoute = () => {
   const { user } = useContext(AuthContext);
-  
+
   if (!user) {
     return <Navigate to="/inicio-sesion" replace />;
   }
-  
+
   return <Outlet />;
 };
 
@@ -232,18 +234,22 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/inicio-sesion" element={<LoginForm />} />
             <Route path="/registro" element={<RegisterForm />} />
-            
+
             {/* Rutas protegidas */}
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/parcelas" element={<Dashboard />} />
+              <Route path="/parcelas" element={
+                <PlotsProvider>
+                  <Plots />
+                </PlotsProvider>
+              } />
               <Route path="/actividades" element={<Dashboard />} />
               <Route path="/trabajadores" element={<Dashboard />} />
               <Route path="/recursos" element={<Dashboard />} />
               <Route path="/perfil" element={<Dashboard />} />
               <Route path="/configuracion" element={<Dashboard />} />
             </Route>
-            
+
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </AuthProvider>
