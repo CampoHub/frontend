@@ -59,11 +59,10 @@ const PlotForm = ({ plot = null, onSave, onCancel }) => {
   };
 
   return (
-    <form className="form-container" onSubmit={handleSubmit}>
-      <h2>{plot ? 'Editar Parcela' : 'Nueva Parcela'}</h2>
-      
-      <div className="form-group">
-        <label htmlFor="name">Nombre:</label>
+    <form className="form-container" style={{ background: 'var(--card-background)', boxShadow: 'var(--box-shadow)', borderRadius: '10px', padding: '2rem', maxWidth: '400px', margin: '0 auto' }} onSubmit={handleSubmit}>
+      <h2 style={{ color: 'var(--primary-color)', fontWeight: 700, marginBottom: '1.5rem', fontSize: '1.3rem' }}>{plot ? 'Editar Parcela' : 'Nueva Parcela'}</h2>
+      <div className="form-group" style={{ marginBottom: '1rem' }}>
+        <label htmlFor="name" style={{ fontWeight: 500, color: 'var(--text-primary)' }}>Nombre:</label>
         <input
           type="text"
           id="name"
@@ -71,12 +70,12 @@ const PlotForm = ({ plot = null, onSave, onCancel }) => {
           value={formData.name}
           onChange={handleChange}
           className={errors.name ? 'error' : ''}
+          style={{ width: '100%', padding: '0.7rem', borderRadius: '6px', border: '1px solid var(--border-color)', marginTop: '0.3rem', fontSize: '1rem' }}
         />
-        {errors.name && <span className="error-message">{errors.name}</span>}
+        {errors.name && <span className="error-message" style={{ color: 'var(--danger-color)', fontSize: '0.9rem' }}>{errors.name}</span>}
       </div>
-
-      <div className="form-group">
-        <label htmlFor="size">Tamaño (hectáreas):</label>
+      <div className="form-group" style={{ marginBottom: '1rem' }}>
+        <label htmlFor="size" style={{ fontWeight: 500, color: 'var(--text-primary)' }}>Tamaño (hectáreas):</label>
         <input
           type="number"
           id="size"
@@ -86,18 +85,19 @@ const PlotForm = ({ plot = null, onSave, onCancel }) => {
           step="0.01"
           min="0"
           className={errors.size ? 'error' : ''}
+          style={{ width: '100%', padding: '0.7rem', borderRadius: '6px', border: '1px solid var(--border-color)', marginTop: '0.3rem', fontSize: '1rem' }}
         />
-        {errors.size && <span className="error-message">{errors.size}</span>}
+        {errors.size && <span className="error-message" style={{ color: 'var(--danger-color)', fontSize: '0.9rem' }}>{errors.size}</span>}
       </div>
-
-      <div className="form-group">
-        <label htmlFor="type">Tipo:</label>
+      <div className="form-group" style={{ marginBottom: '1rem' }}>
+        <label htmlFor="type" style={{ fontWeight: 500, color: 'var(--text-primary)' }}>Tipo:</label>
         <select
           id="type"
           name="type"
           value={formData.type}
           onChange={handleChange}
           className={errors.type ? 'error' : ''}
+          style={{ width: '100%', padding: '0.7rem', borderRadius: '6px', border: '1px solid var(--border-color)', marginTop: '0.3rem', fontSize: '1rem' }}
         >
           <option value="">Selecciona un tipo</option>
           <option value="Cultivo">Cultivo</option>
@@ -105,36 +105,35 @@ const PlotForm = ({ plot = null, onSave, onCancel }) => {
           <option value="Mixto">Mixto</option>
           <option value="Otro">Otro</option>
         </select>
-        {errors.type && <span className="error-message">{errors.type}</span>}
+        {errors.type && <span className="error-message" style={{ color: 'var(--danger-color)', fontSize: '0.9rem' }}>{errors.type}</span>}
       </div>
-
-      <div className="form-group">
-        <label htmlFor="location">Ubicación:</label>
+      <div className="form-group" style={{ marginBottom: '1rem' }}>
+        <label htmlFor="location" style={{ fontWeight: 500, color: 'var(--text-primary)' }}>Ubicación:</label>
         <input
           type="text"
           id="location"
           name="location"
           value={formData.location}
           onChange={handleChange}
+          style={{ width: '100%', padding: '0.7rem', borderRadius: '6px', border: '1px solid var(--border-color)', marginTop: '0.3rem', fontSize: '1rem' }}
         />
       </div>
-
-      <div className="form-group">
-        <label htmlFor="description">Descripción:</label>
+      <div className="form-group" style={{ marginBottom: '1rem' }}>
+        <label htmlFor="description" style={{ fontWeight: 500, color: 'var(--text-primary)' }}>Descripción:</label>
         <textarea
           id="description"
           name="description"
           value={formData.description}
           onChange={handleChange}
-          rows="4"
+          rows="3"
+          style={{ width: '100%', padding: '0.7rem', borderRadius: '6px', border: '1px solid var(--border-color)', marginTop: '0.3rem', fontSize: '1rem', resize: 'vertical' }}
         />
       </div>
-
-      <div className="form-buttons">
-        <button type="button" className="btn btn-cancel" onClick={onCancel}>
+      <div className="form-buttons" style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '2rem' }}>
+        <button type="button" className="btn btn-cancel" style={{ background: 'transparent', color: 'var(--primary-color)', border: '1px solid var(--primary-color)', borderRadius: '6px', padding: '0.5rem 1.2rem' }} onClick={onCancel}>
           Cancelar
         </button>
-        <button type="submit" className="btn btn-save">
+        <button type="submit" className="btn btn-save" style={{ background: 'var(--primary-color)', color: '#fff', borderRadius: '6px', border: 'none', padding: '0.5rem 1.2rem' }}>
           Guardar
         </button>
       </div>

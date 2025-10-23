@@ -4,6 +4,7 @@ import PlotList from './plots/PlotList';
 import PlotForm from './plots/PlotForm';
 import PlotDetails from './plots/PlotDetails';
 import '../layouts/dashboard/dashboard.css';
+import { Link } from 'react-router-dom';
 
 const Plots = () => {
   const { plots, loading, error, fetchPlots } = useContext(PlotsContext);
@@ -38,12 +39,19 @@ const Plots = () => {
     <div className="dashboard-content">
       <div className="dashboard-header">
         <h1>Gestión de Parcelas</h1>
-        <button 
-          className="btn btn-primary" 
-          onClick={handleShowForm}
-        >
-          Nueva Parcela
-        </button>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <Link to="/dashboard">
+            <button className="btn btn-secondary" style={{ background: 'transparent', color: 'var(--primary-color)', border: '1px solid var(--primary-color)' }}>
+              <i className="pi pi-arrow-left" style={{ marginRight: 8 }}></i> Volver al Dashboard
+            </button>
+          </Link>
+          <button 
+            className="btn btn-primary" 
+            onClick={handleShowForm}
+          >
+            Nueva Parcela
+          </button>
+        </div>
       </div>
 
       {loading ? (
