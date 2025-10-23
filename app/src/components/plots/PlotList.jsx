@@ -17,37 +17,40 @@ const PlotList = ({ plots, onSelectPlot, onEditPlot }) => {
   };
 
   return (
-    <div className="list-container">
+    <div className="list-container" style={{ padding: '0', margin: '0' }}>
       {plots.length === 0 ? (
-        <p className="empty-message">No hay parcelas registradas</p>
+        <p className="empty-message" style={{ color: 'var(--text-light)', textAlign: 'center', margin: '2rem 0' }}>No hay parcelas registradas</p>
       ) : (
-        <ul className="item-list">
+        <ul className="item-list" style={{ listStyle: 'none', padding: 0 }}>
           {plots.map(plot => (
             <li 
               key={plot.id} 
               className="item" 
+              style={{ background: 'var(--card-background)', boxShadow: 'var(--box-shadow)', borderRadius: '8px', marginBottom: '1rem', padding: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', transition: 'var(--transition)' }}
               onClick={() => onSelectPlot(plot)}
             >
-              <div className="item-details">
-                <h3>{plot.name}</h3>
-                <p>Tamaño: {plot.size} hectáreas</p>
-                <p>Tipo: {plot.type}</p>
+              <div className="item-details" style={{ flex: 1 }}>
+                <h3 style={{ margin: 0, fontSize: '1.2rem', color: 'var(--text-primary)' }}>{plot.name}</h3>
+                <p style={{ margin: '0.5rem 0', color: 'var(--text-light)' }}>Tamaño: {plot.size} hectáreas</p>
+                <p style={{ margin: 0, color: 'var(--text-light)' }}>Tipo: {plot.type}</p>
               </div>
-              <div className="item-actions">
+              <div className="item-actions" style={{ display: 'flex', gap: '0.5rem' }}>
                 <button 
                   className="btn btn-edit" 
+                  style={{ background: 'var(--primary-color)', color: '#fff', borderRadius: '6px', border: 'none', padding: '0.5rem 1rem' }}
                   onClick={(e) => {
                     e.stopPropagation();
                     onEditPlot(plot);
                   }}
                 >
-                  Editar
+                  <i className="pi pi-pencil" style={{ marginRight: 4 }}></i> Editar
                 </button>
                 <button 
                   className="btn btn-delete" 
+                  style={{ background: 'var(--danger-color)', color: '#fff', borderRadius: '6px', border: 'none', padding: '0.5rem 1rem' }}
                   onClick={(e) => handleDelete(plot.id, e)}
                 >
-                  Eliminar
+                  <i className="pi pi-trash" style={{ marginRight: 4 }}></i> Eliminar
                 </button>
               </div>
             </li>

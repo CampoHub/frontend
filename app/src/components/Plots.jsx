@@ -3,8 +3,8 @@ import { PlotsContext } from '../context/PlotsContext';
 import PlotList from './plots/PlotList';
 import PlotForm from './plots/PlotForm';
 import PlotDetails from './plots/PlotDetails';
-import Dashboard from '../layouts/dashboard/Dashboard';
 import '../layouts/dashboard/dashboard.css';
+import { Link } from 'react-router-dom';
 
 const Plots = () => {
   const { plots, loading, error, fetchPlots } = useContext(PlotsContext);
@@ -35,12 +35,16 @@ const Plots = () => {
     setShowForm(true);
   };
 
-  // Renderiza el contenido de parcelas dentro del layout Dashboard
   return (
-    <Dashboard>
-      <div className="dashboard-content">
-        <div className="dashboard-header">
-          <h1>Gestión de Parcelas</h1>
+    <div className="dashboard-content">
+      <div className="dashboard-header">
+        <h1>Gestión de Parcelas</h1>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <Link to="/dashboard">
+            <button className="btn btn-secondary" style={{ background: 'transparent', color: 'var(--primary-color)', border: '1px solid var(--primary-color)' }}>
+              <i className="pi pi-arrow-left" style={{ marginRight: 8 }}></i> Volver al Dashboard
+            </button>
+          </Link>
           <button 
             className="btn btn-primary" 
             onClick={handleShowForm}
@@ -48,49 +52,49 @@ const Plots = () => {
             Nueva Parcela
           </button>
         </div>
+      </div>
 
-        {loading ? (
-          <div className="loading">Cargando parcelas...</div>
-        ) : error ? (
-          <div className="error-message">{error}</div>
-        ) : (
-          <div className="dashboard-grid">
-            <div className="card list-card">
-              <h2>Parcelas</h2>
-              <PlotList
-                plots={plots}
-                onSelectPlot={handleSelectPlot}
-                onEditPlot={handleEditPlot}
+      {loading ? (
+        <div className="loading">Cargando parcelas...</div>
+      ) : error ? (
+        <div className="error-message">{error}</div>
+      ) : (
+        <div className="dashboard-grid">
+          <div className="card list-card">
+            <h2>Parcelas</h2>
+            <PlotList
+              plots={plots}
+              onSelectPlot={handleSelectPlot}
+              onEditPlot={handleEditPlot}
+            />
+          </div>
+
+          {showForm ? (
+            <div className="card form-card">
+              <h2>{selectedPlot ? 'Editar Parcela' : 'Nueva Parcela'}</h2>
+              <PlotForm
+                plot={selectedPlot}
+                onClose={handleCloseForm}
               />
             </div>
-
-            {showForm ? (
-              <div className="card form-card">
-                <h2>{selectedPlot ? 'Editar Parcela' : 'Nueva Parcela'}</h2>
-                <PlotForm
-                  plot={selectedPlot}
-                  onClose={handleCloseForm}
-                />
-              </div>
-            ) : selectedPlot ? (
-              <div className="card details-card">
-                <h2>Detalles de la Parcela</h2>
-                <PlotDetails
-                  plot={selectedPlot}
-                  onEdit={() => handleEditPlot(selectedPlot)}
-                />
-              </div>
-            ) : (
-              <div className="card info-card">
-                <h2>Información</h2>
-                <p>Selecciona una parcela para ver sus detalles o crea una nueva.</p>
-                <p>Las parcelas te permiten organizar tus cultivos y trabajadores por áreas de tu campo.</p>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    </Dashboard>
+          ) : selectedPlot ? (
+            <div className="card details-card">
+              <h2>Detalles de la Parcela</h2>
+              <PlotDetails
+                plot={selectedPlot}
+                onEdit={() => handleEditPlot(selectedPlot)}
+              />
+            </div>
+          ) : (
+            <div className="card info-card">
+              <h2>Información</h2>
+              <p>Selecciona una parcela para ver sus detalles o crea una nueva.</p>
+              <p>Las parcelas te permiten organizar tus cultivos y trabajadores por áreas de tu campo.</p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   );
 };
 
