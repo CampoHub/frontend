@@ -13,7 +13,9 @@ import Dashboard from './layouts/dashboard/Dashboard';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { PlotsProvider } from './context/PlotsContext';
+import { ActivitiesProvider } from './context/ActivitiesContext';
 import Plots from './components/Plots';
+import Activities from './components/Activities';
 
 // Componente para rutas protegidas
 const ProtectedRoute = () => {
@@ -243,7 +245,11 @@ function App() {
                   <Plots />
                 </PlotsProvider>
               } />
-              <Route path="/actividades" element={<Dashboard />} />
+              <Route path="/actividades"  element={
+                <ActivitiesProvider>
+                  <Activities />
+                </ActivitiesProvider>
+              } />
               <Route path="/trabajadores" element={<Dashboard />} />
               <Route path="/recursos" element={<Dashboard />} />
               <Route path="/perfil" element={<Dashboard />} />
