@@ -8,7 +8,8 @@ const ActivityDetails = ({ activity, onEdit }) => {
     return <div>No hay actividad seleccionada.</div>;
   }
 
-  const plot = plots.find(p => p.id === activity.id_parcela);
+  // Encontrar la parcela asociada a la actividad
+  const parcela = plots.find(p => p.id === activity.id_parcela);
 
   const getStatusColor = (estado) => {
     const colors = {
@@ -24,7 +25,7 @@ const ActivityDetails = ({ activity, onEdit }) => {
       <h3>{activity.nombre}</h3>
       <div className="details-content">
         <p><strong>Tipo:</strong> {activity.tipo}</p>
-        <p><strong>Parcela:</strong> {plot?.nombre || 'No especificada'}</p>
+        <p><strong>Parcela:</strong> {parcela?.nombre || 'No especificada'}</p>
         <p><strong>Fecha de inicio:</strong> {new Date(activity.fecha_inicio).toLocaleDateString()}</p>
         {activity.fecha_fin && (
           <p><strong>Fecha de fin:</strong> {new Date(activity.fecha_fin).toLocaleDateString()}</p>

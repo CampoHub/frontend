@@ -245,10 +245,12 @@ function App() {
                   <Plots />
                 </PlotsProvider>
               } />
-              <Route path="/actividades"  element={
-                <ActivitiesProvider>
-                  <Activities />
-                </ActivitiesProvider>
+              <Route path="/actividades" element={
+                <PlotsProvider>
+                  <ActivitiesProvider>
+                    <Activities />
+                  </ActivitiesProvider>
+                </PlotsProvider>
               } />
               <Route path="/trabajadores" element={<Dashboard />} />
               <Route path="/recursos" element={<Dashboard />} />
