@@ -1,0 +1,167 @@
+.workers-table {
+  margin-top: 1rem;
+  background: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.workers-table .p-datatable-wrapper {
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.workers-table .p-datatable-header {
+  background: var(--background-light);
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+}
+
+.workers-table .p-datatable-thead > tr > th {
+  background: var(--background-light);
+  color: var(--text-color);
+  font-weight: 600;
+  padding: 1rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.workers-table .p-datatable-tbody > tr > td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+.workers-table .p-paginator {
+  padding: 1rem;
+  background: var(--background-light);
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+}
+
+.card-content {
+  padding: 1.5rem;
+  background: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  margin: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.workers-container {
+  width: 100%;
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.workers-table .p-datatable-tbody > tr {
+  transition: var(--transition);
+}
+
+.workers-table .p-datatable-tbody > tr:hover {
+  background: var(--background-accent);
+}
+
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+}
+
+.status-badge.active {
+  background: var(--primary-color);
+  color: white;
+}
+
+.status-badge.inactive {
+  background: var(--text-light);
+  color: white;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.worker-form-dialog .p-dialog-content {
+  padding: 2rem;
+}
+
+.table-header {
+  padding: 0.5rem 1rem;
+}
+
+.table-header h3 {
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.worker-name, .worker-email, .worker-phone {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.worker-email a, .worker-phone a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.worker-email a:hover, .worker-phone a:hover {
+  text-decoration: underline;
+}
+
+.p-datatable .p-datatable-tbody > tr {
+  transition: background-color 0.2s;
+}
+
+.p-datatable .p-datatable-tbody > tr:hover {
+  background: var(--background-accent) !important;
+}
+
+.p-datatable.p-datatable-striped .p-datatable-tbody > tr:nth-child(even) {
+  background: var(--background-light);
+}
+
+.p-column-header-content {
+  justify-content: center;
+}
+
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.active {
+  background: var(--primary-color);
+  color: white;
+}
+
+.status-badge.inactive {
+  background: var(--text-light);
+  color: white;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.action-buttons .p-button {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.action-buttons .p-button:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s;
+}
