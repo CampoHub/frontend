@@ -49,6 +49,17 @@ const Sidebar = ({ sidebarOpen, toggleSidebar }) => {
           <span>Recursos</span>
         </Link>
 
+        {/* Menu admin pa */}
+        {user.role === "admin" && (
+          <>
+            <div className="menu-category">Admin</div>
+            <Link to="/admin/usuarios" className="menu-item">
+              <i className="pi pi-users"></i>
+              <span>Gestión de Usuarios</span>
+            </Link>
+          </>
+        )}
+
         <div className="menu-category">Configuración</div>
         <Link to="/perfil" className="menu-item">
           <i className="pi pi-user-edit"></i>
