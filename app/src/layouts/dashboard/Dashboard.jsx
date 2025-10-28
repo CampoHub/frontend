@@ -44,7 +44,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-    <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+    <Sidebar />
       <main className="main-content">
         <div className="content-header">
           <div className="content-title">
