@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useCallback } from "react";
 import activitiesService from "../services/activities";
 
 export const ActivitiesContext = createContext();
@@ -8,7 +8,7 @@ export const ActivitiesProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchActivities = async () => {
+  const getActivities = useCallback(async () => {
     try {
       setLoading(true);
       const data = await activitiesService.getAll();
@@ -20,7 +20,7 @@ export const ActivitiesProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const addActivity = async (activityData) => {
     try {
@@ -72,8 +72,8 @@ export const ActivitiesProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchActivities();
-  }, []);
+    getActivities();
+  }, [getActivities]);
 
   return (
     <ActivitiesContext.Provider
@@ -81,7 +81,7 @@ export const ActivitiesProvider = ({ children }) => {
         activities,
         loading,
         error,
-        fetchActivities,
+        getActivities,
         addActivity,
         updateActivity,
         removeActivity

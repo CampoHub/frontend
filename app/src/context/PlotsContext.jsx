@@ -8,6 +8,13 @@ export const PlotsProvider = ({ children }) => {
   const [plots, setPlots] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Estado para los filtros
+  const [filters, setFilters] = useState({
+    tipo_cultivo: '',
+    estado: ''
+  });
+  
   const navigate = useNavigate();
 
   const fetchPlots = async () => {
@@ -79,6 +86,22 @@ export const PlotsProvider = ({ children }) => {
     return plots.find((plot) => plot.id === id) || null;
   };
 
+  // Actualizar filtros
+  const updateFilters = (newFilters) => {
+    setFilters(prevFilters => ({
+      ...prevFilters,
+      ...newFilters
+    }));
+  };
+
+  // Obtener parcelas filtradas
+  const getFilteredPlots = () => {
+    return plots.filter(plot => {
+      const matchesTipoCultivo = !filters.tipo_cultivo || plot.tipo_cultivo === filters.tipo_cultivo;
+      const matchesEstado = !filters.estado || plot.estado === filters.estado;
+      return matchesTipoCultivo && matchesEstado;
+    });
+  };
 
   useEffect(() => {
     fetchPlots();
@@ -87,14 +110,16 @@ export const PlotsProvider = ({ children }) => {
   return (
     <PlotsContext.Provider
       value={{
-        plots,
+        plots: getFilteredPlots(), // Ahora devolvemos las parcelas filtradas
         loading,
         error,
+        filters,
         fetchPlots,
         addPlot,
         updatePlot,
         removePlot,
         getPlotById,
+        updateFilters
       }}
     >
       {children}

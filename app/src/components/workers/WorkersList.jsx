@@ -1,17 +1,27 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 import { useWorkers } from '../../context/WorkersContext';
+import { useActivities } from '../../context/hooks/useActivities';
+import { useAuth } from '../../context/AuthContext';
 import WorkerForm from './WorkerForm';
+import AssignWorkerModal from './AssignWorkerModal';
 import './workers.css';
 
 const WorkersList = () => {
   const { workers, loading, removeWorker } = useWorkers();
+  const { activities, getActivities } = useActivities();
+  const { user } = useAuth();
   const [selectedWorker, setSelectedWorker] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [showAssignModal, setShowAssignModal] = useState(false);
+
+  useEffect(() => {
+    getActivities();
+  }, [getActivities]);
 
   const handleEditWorker = (worker) => {
     setSelectedWorker(worker);
@@ -47,6 +57,19 @@ const WorkersList = () => {
           onClick={() => confirmDelete(worker)}
           tooltip="Eliminar trabajador"
         />
+        {user?.role === 'admin' && (
+          <Button 
+            icon="pi pi-user-plus" 
+            rounded 
+            text 
+            severity="info"
+            onClick={() => {
+              setSelectedWorker(worker);
+              setShowAssignModal(true);
+            }}
+            tooltip="Asignar a actividad"
+          />
+        )}
       </div>
     );
   };

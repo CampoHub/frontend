@@ -1,4 +1,4 @@
-import { createContext, useState, useContext, useEffect } from 'react';
+import { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import { getAllWorkers, createWorker, updateWorker, deleteWorker } from '../services/workers';
 
 export const WorkersContext = createContext();
@@ -8,7 +8,7 @@ export const WorkersProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const loadWorkers = async () => {
+  const loadWorkers = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -20,7 +20,7 @@ export const WorkersProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const addWorker = async (workerData) => {
     try {
@@ -65,7 +65,7 @@ export const WorkersProvider = ({ children }) => {
 
   useEffect(() => {
     loadWorkers();
-  }, []);
+  }, [loadWorkers]);
 
   return (
     <WorkersContext.Provider 
