@@ -1,0 +1,147 @@
+import { useEffect, useState } from 'react';
+import { Button } from 'primereact/button';
+import { Calendar } from 'primereact/calendar';
+import { Dropdown } from 'primereact/dropdown';
+import { useAssignments } from '../../context/hooks/useAssignments';
+import { useActivities } from '../../context/hooks/useActivities';
+import { useWorkers } from '../../context/WorkersContext';
+
+const AssignmentForm = ({ assignment, onClose }) => {
+  const { assignWorker } = useAssignments();
+  const { activities } = useActivities();
+  const { workers } = useWorkers();
+
+  const [formData, setFormData] = useState({
+    activityId: '',
+    workerId: '',
+    startDate: null,
+    endDate: null,
+    status: 'pendiente'
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (assignment) {
+      setFormData({
+        activityId: assignment.activityId,
+        workerId: assignment.workerId,
+        startDate: new Date(assignment.startDate),
+        endDate: new Date(assignment.endDate),
+        status: assignment.status
+      });
+    }
+  }, [assignment]);
+
+  const statusOptions = [
+    { label: 'Pendiente', value: 'pendiente' },
+    { label: 'En Progreso', value: 'en_progreso' },
+    { label: 'Completada', value: 'completada' },
+    { label: 'Cancelada', value: 'cancelada' }
+  ];
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      await assignWorker(formData.activityId, {
+        workerId: formData.workerId,
+        startDate: formData.startDate,
+        endDate: formData.endDate,
+        status: formData.status
+      });
+      onClose();
+    } catch (err) {
+      setError(err.message || 'Error al guardar la asignación');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="p-fluid">
+      <div className="field">
+        <label htmlFor="activity">Actividad</label>
+        <Dropdown
+          id="activity"
+          value={formData.activityId}
+          options={activities.map(a => ({ label: a.name, value: a.id }))}
+          onChange={(e) => setFormData({ ...formData, activityId: e.value })}
+          placeholder="Selecciona una actividad"
+          className="w-full"
+        />
+      </div>
+
+      <div className="field">
+        <label htmlFor="worker">Trabajador</label>
+        <Dropdown
+          id="worker"
+          value={formData.workerId}
+          options={workers.map(w => ({ label: w.name, value: w.id }))}
+          onChange={(e) => setFormData({ ...formData, workerId: e.value })}
+          placeholder="Selecciona un trabajador"
+          className="w-full"
+        />
+      </div>
+
+      <div className="field">
+        <label htmlFor="startDate">Fecha de Inicio</label>
+        <Calendar
+          id="startDate"
+          value={formData.startDate}
+          onChange={(e) => setFormData({ ...formData, startDate: e.value })}
+          showTime
+          hourFormat="24"
+        />
+      </div>
+
+      <div className="field">
+        <label htmlFor="endDate">Fecha de Fin</label>
+        <Calendar
+          id="endDate"
+          value={formData.endDate}
+          onChange={(e) => setFormData({ ...formData, endDate: e.value })}
+          showTime
+          hourFormat="24"
+        />
+      </div>
+
+      <div className="field">
+        <label htmlFor="status">Estado</label>
+        <Dropdown
+          id="status"
+          value={formData.status}
+          options={statusOptions}
+          onChange={(e) => setFormData({ ...formData, status: e.value })}
+          placeholder="Selecciona un estado"
+          className="w-full"
+        />
+      </div>
+
+      {error && (
+        <div className="p-error mb-3">{error}</div>
+      )}
+
+      <div className="flex gap-2 justify-end">
+        <Button
+          label="Cancelar"
+          icon="pi pi-times"
+          className="p-button-text"
+          onClick={onClose}
+          type="button"
+        />
+        <Button
+          label="Guardar"
+          icon="pi pi-check"
+          loading={loading}
+          type="submit"
+        />
+      </div>
+    </form>
+  );
+};
+
+export default AssignmentForm;

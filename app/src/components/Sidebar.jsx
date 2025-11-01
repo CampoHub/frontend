@@ -48,6 +48,10 @@ const Sidebar = () => {
           <i className="pi pi-calendar"></i>
           <span>Actividades</span>
         </Link>
+        <Link to="/asignaciones" className={`menu-item ${isActive('/asignaciones') ? 'active' : ''}`}>
+          <i className="pi pi-users"></i>
+          <span>Asignaciones</span>
+        </Link>
         <Link to="/trabajadores" className={`menu-item ${isActive('/trabajadores') ? 'active' : ''}`}>
           <i className="pi pi-users"></i>
           <span>Trabajadores</span>

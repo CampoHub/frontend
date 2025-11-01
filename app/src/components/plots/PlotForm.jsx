@@ -1,13 +1,15 @@
 import { useState, useEffect, useContext } from 'react';
 import { PlotsContext } from '../../context/PlotsContext';
+import './plots.css';
 
-const PlotForm = ({ plot = null, onSave, onCancel }) => {
+const PlotForm = ({ plot = null, onClose }) => {
   const [formData, setFormData] = useState({
     nombre: '',
     superficie: '',
     tipo_cultivo: '',
     estado: ''
   });
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const { addPlot, updatePlot } = useContext(PlotsContext);
 
@@ -45,15 +47,23 @@ const PlotForm = ({ plot = null, onSave, onCancel }) => {
     e.preventDefault();
     if (!validateForm()) return;
 
+    setLoading(true);
+    setErrors({});
+
     try {
       if (plot) {
         await updatePlot(plot.id, formData);
+        alert('Parcela actualizada correctamente');
       } else {
         await addPlot(formData);
+        alert('Parcela creada correctamente');
       }
-      onSave();
+      onClose();
     } catch (error) {
       console.error('Error al guardar la parcela:', error);
+      setErrors({ submit: error.message || 'Error al guardar la parcela' });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -123,14 +133,49 @@ const PlotForm = ({ plot = null, onSave, onCancel }) => {
         </select>
         {errors.estado && <span className="error-message" style={{ color: 'var(--danger-color)', fontSize: '0.9rem' }}>{errors.estado}</span>}
       </div>
-      <div className="form-buttons" style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '2rem' }}>
-        <button type="button" className="btn btn-cancel" style={{ background: 'transparent', color: 'var(--primary-color)', border: '1px solid var(--primary-color)', borderRadius: '6px', padding: '0.5rem 1.2rem' }} onClick={onCancel}>
+            <div className="form-buttons" style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '2rem' }}>
+        <button 
+          type="submit" 
+          className="btn btn-primary" 
+          style={{ 
+            background: 'var(--primary-color)', 
+            color: '#fff', 
+            borderRadius: '6px', 
+            border: 'none', 
+            padding: '0.5rem 1.2rem',
+            opacity: loading ? 0.7 : 1,
+            cursor: loading ? 'not-allowed' : 'pointer'
+          }}
+          disabled={loading}
+        >
+          {loading ? 'Guardando...' : plot ? 'Actualizar' : 'Crear'}
+        </button>
+        <button 
+          type="button" 
+          className="btn btn-cancel" 
+          style={{ 
+            background: 'transparent', 
+            color: 'var(--primary-color)', 
+            border: '1px solid var(--primary-color)', 
+            borderRadius: '6px', 
+            padding: '0.5rem 1.2rem',
+            cursor: loading ? 'not-allowed' : 'pointer'
+          }} 
+          onClick={onClose}
+          disabled={loading}
+        >
           Cancelar
         </button>
-        <button type="submit" className="btn btn-save" style={{ background: 'var(--primary-color)', color: '#fff', borderRadius: '6px', border: 'none', padding: '0.5rem 1.2rem' }}>
-          Guardar
-        </button>
       </div>
+      {errors.submit && (
+        <div className="error-message" style={{ 
+          color: 'var(--danger-color)', 
+          marginTop: '1rem', 
+          textAlign: 'center' 
+        }}>
+          {errors.submit}
+        </div>
+      )}
     </form>
   );
 };

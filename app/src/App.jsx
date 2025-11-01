@@ -30,9 +30,14 @@ const AdminRoute = () => {
 import { ThemeProvider } from "./context/ThemeContext";
 import { PlotsProvider } from "./context/PlotsContext";
 import { ActivitiesProvider } from "./context/ActivitiesContext";
+import { AssignmentsProvider } from "./context/AssignmentsContext";
 import Plots from "./components/Plots";
 import Activities from "./components/Activities";
 import Workers from "./components/Workers";
+import Assignments from "./components/assignments/Assignments";
+import Resources from "./components/resources/Resources";
+import { WorkersProvider } from "./context/WorkersContext";
+import { ResourcesProvider } from "./context/ResourcesContext";
 
 // Componente para rutas protegidas
 const ProtectedRoute = () => {
@@ -342,13 +347,42 @@ function App() {
                 element={
                   <PlotsProvider>
                     <ActivitiesProvider>
-                      <Activities />
+                      <AssignmentsProvider>
+                        <Activities />
+                        <Workers />
+                      </AssignmentsProvider>
                     </ActivitiesProvider>
                   </PlotsProvider>
                 }
               />
-              <Route path="/trabajadores" element={<Workers />} />
-              <Route path="/recursos" element={<Dashboard />} />
+              <Route 
+                path="/trabajadores" 
+                element={
+                  <ActivitiesProvider>
+                    <AssignmentsProvider>
+                      <Workers />
+                    </AssignmentsProvider>
+                  </ActivitiesProvider>
+                } />
+                            <Route 
+                path="/recursos" 
+                element={
+                  <ResourcesProvider>
+                    <Resources />
+                  </ResourcesProvider>
+                } 
+              />
+              <Route 
+                path="/asignaciones" 
+                element={
+                  <ActivitiesProvider>
+                    <AssignmentsProvider>
+                      <WorkersProvider>
+                        <Assignments />
+                      </WorkersProvider>
+                    </AssignmentsProvider>
+                  </ActivitiesProvider>
+                } />
               <Route path="/perfil" element={<Dashboard />} />
               <Route path="/configuracion" element={<Dashboard />} />
 

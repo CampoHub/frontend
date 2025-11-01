@@ -3,6 +3,8 @@ import { PlotsContext } from '../context/PlotsContext';
 import PlotList from './plots/PlotList';
 import PlotForm from './plots/PlotForm';
 import PlotDetails from './plots/PlotDetails';
+import PlotFilters from './plots/PlotFilters';
+import Modal from './common/Modal';
 import Sidebar from './Sidebar';
 import '../layouts/dashboard/dashboard.css';
 import { Link } from 'react-router-dom';
@@ -46,14 +48,21 @@ const Plots = () => {
       <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
       <main className="main-content">
         <div className="content-header">
-          <h1>Gestión de Parcelas</h1>
-          <div style={{ display: 'flex', gap: '1rem' }}>
-            <button
-              className="btn btn-primary"
-              onClick={handleShowForm}
-            >
-              Nueva Parcela
-            </button>
+          <div className="header-main">
+            <div className="header-title">
+              <h1>Gestión de Parcelas</h1>
+              <button
+                className="btn btn-primary"
+                onClick={handleShowForm}
+              >
+                <i className="pi pi-plus" style={{ marginRight: '0.5rem' }}></i>
+                Nueva Parcela
+              </button>
+            </div>
+          </div>
+
+          <div className="filters-section">
+            <PlotFilters />
           </div>
         </div>
 
@@ -66,21 +75,13 @@ const Plots = () => {
             <div className="card list-card">
               <h2>Parcelas</h2>
               <PlotList
-                plots={plots}
-                onSelectPlot={handleSelectPlot}
+                  plots={plots}
+                  onSelectPlot={handleSelectPlot}
                 onEditPlot={handleEditPlot}
               />
             </div>
 
-            {showForm ? (
-              <div className="card form-card">
-                <h2>{selectedPlot ? 'Editar Parcela' : 'Nueva Parcela'}</h2>
-                <PlotForm
-                  plot={selectedPlot}
-                  onClose={handleCloseForm}
-                />
-              </div>
-            ) : selectedPlot ? (
+            {selectedPlot && !showForm && (
               <div className="card details-card">
                 <h2>Detalles de la Parcela</h2>
                 <PlotDetails
@@ -88,16 +89,21 @@ const Plots = () => {
                   onEdit={() => handleEditPlot(selectedPlot)}
                 />
               </div>
-            ) : (
-              <div className="card info-card">
-                <h2>Información</h2>
-                <p>Selecciona una parcela para ver sus detalles o crea una nueva.</p>
-                <p>Las parcelas te permiten organizar tus cultivos y trabajadores por áreas de tu campo.</p>
-              </div>
             )}
           </div>
         )}
       </main>
+
+      <Modal 
+        isOpen={showForm} 
+        onClose={handleCloseForm}
+        title={selectedPlot ? 'Editar Parcela' : 'Nueva Parcela'}
+      >
+        <PlotForm
+          plot={selectedPlot}
+          onClose={handleCloseForm}
+        />
+      </Modal>
     </div>
   );
 };

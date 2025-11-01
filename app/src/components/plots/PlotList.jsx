@@ -1,63 +1,97 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { PlotsContext } from '../../context/PlotsContext';
+import { getPlotImage } from '../../utils/plotImages';
 import '../../layouts/dashboard/dashboard.css';
+import './plots.css';
 
 const PlotList = ({ plots, onSelectPlot, onEditPlot }) => {
   const { removePlot } = useContext(PlotsContext);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleEdit = (plot, e) => {
+    e.stopPropagation();
+    onEditPlot(plot);
+  };
 
   const handleDelete = async (id, e) => {
     e.stopPropagation();
-    if (window.confirm('¿Estás seguro de que quieres eliminar esta parcela?')) {
+    
+    const plot = plots.find(p => p.id === id);
+    const confirmMessage = `¿Estás seguro de que quieres eliminar la parcela "${plot.nombre}"?\n\nEsta acción no se puede deshacer.`;
+    
+    if (window.confirm(confirmMessage)) {
+      setLoading(true);
+      setError(null);
+      
       try {
         await removePlot(id);
       } catch (error) {
+        setError(error.message || 'Error al eliminar la parcela');
         console.error('Error al eliminar la parcela:', error);
+      } finally {
+        setLoading(false);
       }
     }
   };
 
   return (
-    <div className="list-container" style={{ padding: '0', margin: '0' }}>
+    <div className="plots-list-container">
       {plots.length === 0 ? (
-        <p className="empty-message" style={{ color: 'var(--text-light)', textAlign: 'center', margin: '2rem 0' }}>No hay parcelas registradas</p>
+        <p className="empty-message">No hay parcelas registradas</p>
       ) : (
-        <ul className="item-list" style={{ listStyle: 'none', padding: 0 }}>
+        <div className="plots-grid">
           {plots.map(plot => (
-            <li
+            <div
               key={plot.id}
-              className="item"
-              style={{ background: 'var(--card-background)', boxShadow: 'var(--box-shadow)', borderRadius: '8px', marginBottom: '1rem', padding: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', transition: 'var(--transition)' }}
+              className="plot-item"
               onClick={() => onSelectPlot(plot)}
             >
-              <div className="item-details" style={{ flex: 1 }}>
-                <h3 style={{ margin: 0, fontSize: '1.2rem', color: 'var(--text-primary)' }}>{plot.nombre}</h3>
-                <p style={{ margin: '0.5rem 0', color: 'var(--text-light)' }}>Tamaño: {plot.superficie} hectáreas</p>
-                <p style={{ margin: 0, color: 'var(--text-light)' }}>Tipo: {plot.tipo_cultivo}</p>
-                <p style={{ margin: 0, color: 'var(--text-light)' }}>Estado: {plot.estado}</p>
-              </div>
-              <div className="item-actions" style={{ display: 'flex', gap: '0.5rem' }}>
-                <button
-                  className="btn btn-edit"
-                  style={{ background: 'var(--primary-color)', color: '#fff', borderRadius: '6px', border: 'none', padding: '0.5rem 1rem' }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onEditPlot(plot);
+              <div className="plot-image-container">
+                <img 
+                  src={getPlotImage(plot.id)} 
+                  alt={`Vista de la parcela ${plot.nombre}`}
+                  className="plot-image"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = '/parcela1.png';
                   }}
-                >
-                  <i className="pi pi-pencil" style={{ marginRight: 4 }}></i> Editar
-                </button>
-                <button
-                  className="btn btn-delete"
-                  style={{ background: 'var(--danger-color)', color: '#fff', borderRadius: '6px', border: 'none', padding: '0.5rem 1rem' }}
-                  onClick={(e) => handleDelete(plot.id, e)}
-                >
-                  <i className="pi pi-trash" style={{ marginRight: 4 }}></i> Eliminar
-                </button>
+                />
               </div>
-            </li>
+              
+              <div className="plot-content">
+                <div className="plot-header">
+                  <h3 className="plot-title">{plot.nombre}</h3>
+                </div>
+                <div className="plot-details">
+                  <p>Tamaño: {plot.superficie} hectáreas</p>
+                  <p>Tipo: {plot.tipo_cultivo}</p>
+                  <p>Estado: {plot.estado}</p>
+                </div>
+                <div className="plot-actions">
+                  <button
+                    className="btn btn-edit"
+                    onClick={(e) => handleEdit(plot, e)}
+                    disabled={loading}
+                  >
+                    <i className="pi pi-pencil"></i>
+                    <span>Editar</span>
+                  </button>
+                  <button
+                    className="btn btn-delete"
+                    onClick={(e) => handleDelete(plot.id, e)}
+                    disabled={loading}
+                  >
+                    <i className="pi pi-trash"></i>
+                    <span>Eliminar</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
+      {error && <div className="error-message">{error}</div>}
     </div>
   );
 };
