@@ -75,20 +75,7 @@ export const AssignmentsProvider = ({ children }) => {
     }
   }, []);
 
-  const assignWorker = useCallback(async (activityId, workerData) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const assignment = await assignmentService.assignWorker(activityId, workerData);
-      setAssignments(prev => [...prev, assignment]);
-      return assignment;
-    } catch (err) {
-      setError(err.message);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+
 
   const unassignWorker = useCallback(async (assignmentId, date = new Date()) => {
     try {
@@ -129,7 +116,6 @@ export const AssignmentsProvider = ({ children }) => {
     error,
     getAssignments,
     getActivityAssignments,
-    assignWorker,
     unassignWorker,
     deleteAssignment,
     createAssignment,
@@ -140,7 +126,6 @@ export const AssignmentsProvider = ({ children }) => {
     error,
     getAssignments,
     getActivityAssignments,
-    assignWorker,
     unassignWorker,
     deleteAssignment,
     createAssignment,

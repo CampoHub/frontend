@@ -5,17 +5,20 @@ import '../common/Modal.css';
 const AssignWorkerModal = ({ isOpen, onClose, worker, activities }) => {
   const [selectedActivity, setSelectedActivity] = useState('');
   const [rol, setRol] = useState('operador');
-  const { assignWorker, loading, error } = useAssignments();
+  const { createAssignment, loading, error } = useAssignments();
 
   if (!isOpen) return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await assignWorker(selectedActivity, {
+      await createAssignment({
+        activity_id: selectedActivity,
         worker_id: worker.id,
-        rol_en_actividad: rol
+        rol: rol,
+        status: "pendiente"
       });
+
       onClose();
     } catch (err) {
       console.error('Error al asignar trabajador:', err);

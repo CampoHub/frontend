@@ -21,6 +21,10 @@ const assignmentService = {
 
   deleteAssignment(id) {
     return axios.delete(`${BASE_URL}/${id}`);
+  },
+
+  assignWorker(id, workerId) {
+    return axios.post(`${BASE_URL}/${id}/worker`, { workerId });
   }
 };
 

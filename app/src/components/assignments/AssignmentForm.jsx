@@ -7,7 +7,7 @@ import { useActivities } from '../../context/hooks/useActivities';
 import { useWorkers } from '../../context/WorkersContext';
 
 const AssignmentForm = ({ assignment, onClose }) => {
-  const { assignWorker } = useAssignments();
+  const { createAssignment } = useAssignments();
   const { activities } = useActivities();
   const { workers } = useWorkers();
 
@@ -47,12 +47,14 @@ const AssignmentForm = ({ assignment, onClose }) => {
     setError(null);
 
     try {
-      await assignWorker(formData.activityId, {
-        workerId: formData.workerId,
-        startDate: formData.startDate,
-        endDate: formData.endDate,
+      await createAssignment({
+        activity_id: formData.activityId,
+        worker_id: formData.workerId,
+        start_date: formData.startDate,
+        end_date: formData.endDate,
         status: formData.status
       });
+
       onClose();
     } catch (err) {
       setError(err.message || 'Error al guardar la asignación');
@@ -68,7 +70,7 @@ const AssignmentForm = ({ assignment, onClose }) => {
         <Dropdown
           id="activity"
           value={formData.activityId}
-          options={activities.map(a => ({ label: a.name, value: a.id }))}
+          options={activities.map(a => ({ label: a.nombre, value: a.id }))}
           onChange={(e) => setFormData({ ...formData, activityId: e.value })}
           placeholder="Selecciona una actividad"
           className="w-full"
@@ -80,7 +82,7 @@ const AssignmentForm = ({ assignment, onClose }) => {
         <Dropdown
           id="worker"
           value={formData.workerId}
-          options={workers.map(w => ({ label: w.name, value: w.id }))}
+          options={workers.map(w => ({ label: w.especialidad, value: w.id }))}
           onChange={(e) => setFormData({ ...formData, workerId: e.value })}
           placeholder="Selecciona un trabajador"
           className="w-full"
