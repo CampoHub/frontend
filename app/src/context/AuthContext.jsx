@@ -22,23 +22,17 @@ export const AuthProvider = ({children}) =>{
     const decodeUser = (token)=>{
         try {
             const decoded = jwtDecode(token)
-            if(!decoded.exp || decoded.exp * 1000 < Date.now()){
-                return null;
-            }
+            if(!decoded.exp || decoded.exp * 1000 < Date.now()) return null
 
             return{
-                id: decoded.user.id,
-                name: decoded.user.nombre,
-                email: decoded.user.correo,
-                isActive: decoded.user.is_active,
-                role: decoded.user.rol,
-                createdAt: decoded.user.createdAt,
-                updatedAt: decoded.user.updatedAt,
+            id: decoded.sub,
+            role: decoded.role
             }
         } catch {
             return null
         }
     }
+
 
     useEffect(()=>{
         const token = localStorage.getItem('token')

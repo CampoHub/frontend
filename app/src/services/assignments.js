@@ -1,53 +1,28 @@
-import api from './api';
+import api from "./api";
 
 export const assignmentService = {
-  // Obtener todas las asignaciones
-  getAllAssignments: async () => {
-    try {
-      const response = await api.get('/assignments');
-      return response.data;
-    } catch (error) {
-      throw error.response?.data || error.message;
-    }
+  getAll: async () => {
+    const r = await api.get("/assignments");
+    return r.data;
   },
-
-  // Obtener asignaciones de una actividad
-  getAssignments: async (activityId) => {
-    try {
-      const response = await api.get(`/activities/${activityId}/assignments`);
-      return response.data;
-    } catch (error) {
-      throw error.response?.data || error.message;
-    }
+  getByActivity: async (activityId) => {
+    const r = await api.get(`/assignments/activity/${activityId}`);
+    return r.data;
   },
-
-  // Asignar trabajador a una actividad
-  assignWorker: async (activityId, data) => {
-    try {
-      const response = await api.post(`/activities/${activityId}/assignments`, data);
-      return response.data;
-    } catch (error) {
-      throw error.response?.data || error.message;
-    }
+  create: async (payload) => {
+    const r = await api.post("/assignments", payload);
+    return r.data;
   },
-
-  // Desasignar trabajador de una actividad
-  unassignWorker: async (assignmentId, data) => {
-    try {
-      const response = await api.put(`/activity-assignments/${assignmentId}/unassign`, data);
-      return response.data;
-    } catch (error) {
-      throw error.response?.data || error.message;
-    }
+  update: async (id, payload) => {
+    const r = await api.put(`/assignments/${id}`, payload);
+    return r.data;
   },
-
-  // Eliminar asignación
-  deleteAssignment: async (assignmentId) => {
-    try {
-      await api.delete(`/activity-assignments/${assignmentId}`);
-      return true;
-    } catch (error) {
-      throw error.response?.data || error.message;
-    }
-  }
+  unassign: async (id, payload) => {
+    const r = await api.put(`/assignments/${id}/unassign`, payload);
+    return r.data;
+  },
+  remove: async (id) => {
+    await api.delete(`/assignments/${id}`);
+    return true;
+  },
 };
