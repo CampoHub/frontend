@@ -19,6 +19,7 @@ import RegisterForm from "./layouts/auth/RegisterForm";
 import Dashboard from "./layouts/dashboard/Dashboard";
 import { AuthProvider, AuthContext } from "./context/AuthContext";
 import UsersAdmin from "./layouts/dashboard/admin/UsersAdmin";
+import Profile from "./components/profile/Profile";
 // Componente para rutas protegidas solo para admin
 const AdminRoute = () => {
   const { user } = useContext(AuthContext);
@@ -383,7 +384,7 @@ function App() {
                     </AssignmentsProvider>
                   </ActivitiesProvider>
                 } />
-              <Route path="/perfil" element={<Dashboard />} />
+              <Route path="/perfil" element={<Profile />} />
               <Route path="/configuracion" element={<Dashboard />} />
 
               {/* <Route path="/dashboard/admin" element={<DashboardAdminLayout />}>
