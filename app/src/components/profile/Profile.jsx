@@ -133,14 +133,14 @@ const Profile = () => {
     }
 
     return (
-        <div className="app-container">
+        <div className="dashboard-container">
             <Sidebar />
-            <div className="main-content overflow-y-auto">
-                <div className="p-4">
+            <main className="main-content overflow-y-auto p-0">
+                <div className="p-4 pt-2">
                     <Toast ref={toast} />
-                    
+
                     <h1 className="text-2xl font-bold mb-4">Mi Perfil</h1>
-                    
+
                     <div className="grid">
                         <div className="col-12 md:col-6">
                             <Card title="Información Personal" className="mb-4">
@@ -227,9 +227,10 @@ const Profile = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </main>
         </div>
     );
+
 };
 
 export default Profile;

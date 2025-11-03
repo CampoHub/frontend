@@ -117,12 +117,13 @@ const Assignments = () => {
   }
 
   return (
-    <div className="app-container">
+    <div className="dashboard-container">
       <Sidebar />
-      <div className="main-content">
+
+      <main className="main-content">
         <div className="p-4">
           <Toast ref={Toast} />
-          
+
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-2xl font-bold">Asignaciones</h1>
             <Button 
@@ -140,21 +141,11 @@ const Assignments = () => {
             className="p-datatable-striped"
           >
             <Column field="id" header="ID" sortable />
-            <Column 
-              field="activityId" 
-              header="Actividad" 
-              body={activityTemplate} 
-              sortable 
-            />
+            <Column field="activityId" header="Actividad" body={activityTemplate} sortable />
             <Column field="workerId" header="ID Trabajador" sortable />
             <Column field="startDate" header="Fecha Inicio" sortable />
             <Column field="endDate" header="Fecha Fin" sortable />
-            <Column 
-              field="status" 
-              header="Estado" 
-              body={statusTemplate} 
-              sortable 
-            />
+            <Column field="status" header="Estado" body={statusTemplate} sortable />
             <Column body={actionsTemplate} header="Acciones" />
           </DataTable>
 
@@ -176,7 +167,7 @@ const Assignments = () => {
             />
           </Dialog>
         </div>
-      </div>
+      </main>
     </div>
   );
 };
