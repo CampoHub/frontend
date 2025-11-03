@@ -109,11 +109,11 @@ const Profile = () => {
     if (loading) {
         return (
             <div className="app-container">
-                <Sidebar />
+            <Sidebar />
                 <div className="main-content">
-                    <div className="flex justify-center items-center h-screen">
-                        <i className="pi pi-spinner pi-spin" style={{ fontSize: '2rem' }}></i>
-                    </div>
+                        <div className="flex justify-center items-start pt-10">
+                            <i className="pi pi-spinner pi-spin" style={{ fontSize: '2rem' }}></i>
+                        </div>
                 </div>
             </div>
         );
