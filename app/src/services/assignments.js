@@ -1,28 +1,27 @@
-import api from "./api";
+import axios from "axios";
 
-export const assignmentService = {
-  getAll: async () => {
-    const r = await api.get("/assignments");
-    return r.data;
+const BASE_URL = "http://localhost:3000/assignments";
+
+const assignmentService = {
+  getAllAssignments() {
+    return axios.get(BASE_URL);
   },
-  getByActivity: async (activityId) => {
-    const r = await api.get(`/assignments/activity/${activityId}`);
-    return r.data;
+
+  getByActivity(activityId) {
+    return axios.get(`${BASE_URL}/activity/${activityId}`);
   },
-  create: async (payload) => {
-    const r = await api.post("/assignments", payload);
-    return r.data;
+
+  createAssignment(payload) {
+    return axios.post(BASE_URL, payload);
   },
-  update: async (id, payload) => {
-    const r = await api.put(`/assignments/${id}`, payload);
-    return r.data;
+
+  updateAssignment(id, payload) {
+    return axios.put(`${BASE_URL}/${id}`, payload);
   },
-  unassign: async (id, payload) => {
-    const r = await api.put(`/assignments/${id}/unassign`, payload);
-    return r.data;
-  },
-  remove: async (id) => {
-    await api.delete(`/assignments/${id}`);
-    return true;
-  },
+
+  deleteAssignment(id) {
+    return axios.delete(`${BASE_URL}/${id}`);
+  }
 };
+
+export default assignmentService;

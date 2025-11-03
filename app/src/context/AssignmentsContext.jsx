@@ -1,5 +1,6 @@
 import React, { createContext, useState, useCallback, useMemo } from 'react';
-import { assignmentService } from '../services/assignments';
+import assignmentService from "../services/assignments";
+
 import { useAuth } from './AuthContext';
 
 export const AssignmentsContext = createContext();
@@ -14,7 +15,8 @@ export const AssignmentsProvider = ({ children }) => {
     try {
       setLoading(true);
       setError(null);
-      const data = await assignmentService.getAllAssignments();
+      const response = await assignmentService.getAllAssignments();
+      const data = response.data;
       setAssignments(data);
       return data;
     } catch (err) {
@@ -29,7 +31,8 @@ export const AssignmentsProvider = ({ children }) => {
     try {
       setLoading(true);
       setError(null);
-      const data = await assignmentService.getAssignments(activityId);
+      const response = await assignmentService.getAssignments(activityId);
+      const data = response.data;
       setAssignments(prev => [...prev, ...data.assignments]);
       return data.assignments;
     } catch (err) {
@@ -40,11 +43,12 @@ export const AssignmentsProvider = ({ children }) => {
     }
   }, []);
 
-  const createAssignment = async (assignmentData) => {
+  const createAssignment = useCallback(async (assignmentData) => {
     try {
       setLoading(true);
       setError(null);
-      const data = await assignmentService.createAssignment(assignmentData);
+      const response = await assignmentService.createAssignment(assignmentData);
+      const data = response.data;
       setAssignments(prev => [...prev, data]);
       return data;
     } catch (err) {
@@ -53,13 +57,14 @@ export const AssignmentsProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const updateAssignment = async (id, assignmentData) => {
+  const updateAssignment = useCallback(async (id, assignmentData) => {
     try {
       setLoading(true);
       setError(null);
-      const data = await assignmentService.updateAssignment(id, assignmentData);
+      const response = await assignmentService.updateAssignment(id, assignmentData);
+      const data = response.data;
       setAssignments(prev => prev.map(a => a.id === id ? data : a));
       return data;
     } catch (err) {
@@ -68,7 +73,7 @@ export const AssignmentsProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const assignWorker = useCallback(async (activityId, workerData) => {
     try {
@@ -85,11 +90,12 @@ export const AssignmentsProvider = ({ children }) => {
     }
   }, []);
 
-  const unassignWorker = async (assignmentId, date = new Date()) => {
+  const unassignWorker = useCallback(async (assignmentId, date = new Date()) => {
     try {
       setLoading(true);
       setError(null);
-      const updated = await assignmentService.unassignWorker(assignmentId, { unassigned_at: date });
+      const response = await assignmentService.unassignWorker(assignmentId, { unassigned_at: date });
+      const updated = response.data;
       setAssignments(prev => 
         prev.map(a => a.id === assignmentId ? updated : a)
       );
@@ -100,7 +106,7 @@ export const AssignmentsProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const deleteAssignment = useCallback(async (assignmentId) => {
     try {
