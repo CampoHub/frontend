@@ -10,7 +10,9 @@ import { useAssignments } from '../../context/hooks/useAssignments';
 import { useActivities } from '../../context/hooks/useActivities';
 import { useAuth } from '../../context/AuthContext';
 import { AuthContext } from '../../context/AuthContext';
+import Sidebar from '../Sidebar';
 import AssignmentForm from './AssignmentForm';
+import '../../layouts/dashboard/dashboard.css';
 
 const Assignments = () => {
   const { 
@@ -115,61 +117,57 @@ const Assignments = () => {
   }
 
   return (
-    <div className="p-4">
-      <Toast ref={Toast} />
-      
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Asignaciones</h1>
-        <Button 
-          label="Nueva Asignación" 
-          icon="pi pi-plus" 
-          onClick={() => setShowDialog(true)}
-        />
-      </div>
+    <div className="dashboard-container">
+      <Sidebar />
 
-      <DataTable 
-        value={assignments} 
-        paginator 
-        rows={10} 
-        rowsPerPageOptions={[5, 10, 25]}
-        className="p-datatable-striped"
-      >
-        <Column field="id" header="ID" sortable />
-        <Column 
-          field="activityId" 
-          header="Actividad" 
-          body={activityTemplate} 
-          sortable 
-        />
-        <Column field="workerId" header="ID Trabajador" sortable />
-        <Column field="startDate" header="Fecha Inicio" sortable />
-        <Column field="endDate" header="Fecha Fin" sortable />
-        <Column 
-          field="status" 
-          header="Estado" 
-          body={statusTemplate} 
-          sortable 
-        />
-        <Column body={actionsTemplate} header="Acciones" />
-      </DataTable>
+      <main className="main-content">
+        <div className="p-4">
+          <Toast ref={Toast} />
 
-      <Dialog
-        visible={showDialog}
-        onHide={() => {
-          setShowDialog(false);
-          setSelectedAssignment(null);
-        }}
-        header={selectedAssignment ? "Editar Asignación" : "Nueva Asignación"}
-        style={{ width: '50vw' }}
-      >
-        <AssignmentForm
-          assignment={selectedAssignment}
-          onClose={() => {
-            setShowDialog(false);
-            setSelectedAssignment(null);
-          }}
-        />
-      </Dialog>
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-2xl font-bold">Asignaciones</h1>
+            <Button 
+              label="Nueva Asignación" 
+              icon="pi pi-plus" 
+              onClick={() => setShowDialog(true)}
+            />
+          </div>
+
+          <DataTable 
+            value={assignments} 
+            paginator 
+            rows={10} 
+            rowsPerPageOptions={[5, 10, 25]}
+            className="p-datatable-striped"
+          >
+            <Column field="id" header="ID" sortable />
+            <Column field="activityId" header="Actividad" body={activityTemplate} sortable />
+            <Column field="workerId" header="ID Trabajador" sortable />
+            <Column field="startDate" header="Fecha Inicio" sortable />
+            <Column field="endDate" header="Fecha Fin" sortable />
+            <Column field="status" header="Estado" body={statusTemplate} sortable />
+            <Column body={actionsTemplate} header="Acciones" />
+          </DataTable>
+
+          <Dialog
+            visible={showDialog}
+            onHide={() => {
+              setShowDialog(false);
+              setSelectedAssignment(null);
+            }}
+            header={selectedAssignment ? "Editar Asignación" : "Nueva Asignación"}
+            style={{ width: '50vw' }}
+          >
+            <AssignmentForm
+              assignment={selectedAssignment}
+              onClose={() => {
+                setShowDialog(false);
+                setSelectedAssignment(null);
+              }}
+            />
+          </Dialog>
+        </div>
+      </main>
     </div>
   );
 };
