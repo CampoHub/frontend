@@ -14,7 +14,17 @@
   border-radius: 8px;
   padding: 1.2rem;
   box-shadow: var(--box-shadow);
+  transition: all 0.3s ease;
   border: 1px solid var(--border-color);
+}
+
+.filters-container h3 {
+  color: var(--text-primary);
+  font-size: 1rem;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .filters-form {
