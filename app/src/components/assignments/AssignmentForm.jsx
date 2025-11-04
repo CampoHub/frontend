@@ -5,6 +5,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { useAssignments } from '../../context/hooks/useAssignments';
 import { useActivities } from '../../context/hooks/useActivities';
 import { useWorkers } from '../../context/WorkersContext';
+import './assignments.css';
 
 const AssignmentForm = ({ assignment, onClose }) => {
   const { createAssignment } = useAssignments();
@@ -64,8 +65,8 @@ const AssignmentForm = ({ assignment, onClose }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-fluid">
-      <div className="field">
+    <form onSubmit={handleSubmit} className="form-container">
+      <div className="form-group">
         <label htmlFor="activity">Actividad</label>
         <Dropdown
           id="activity"
@@ -77,7 +78,7 @@ const AssignmentForm = ({ assignment, onClose }) => {
         />
       </div>
 
-      <div className="field">
+      <div className="form-group">
         <label htmlFor="worker">Trabajador</label>
         <Dropdown
           id="worker"
@@ -89,7 +90,7 @@ const AssignmentForm = ({ assignment, onClose }) => {
         />
       </div>
 
-      <div className="field">
+      <div className="form-group">
         <label htmlFor="startDate">Fecha de Inicio</label>
         <Calendar
           id="startDate"
@@ -100,7 +101,7 @@ const AssignmentForm = ({ assignment, onClose }) => {
         />
       </div>
 
-      <div className="field">
+      <div className="form-group">
         <label htmlFor="endDate">Fecha de Fin</label>
         <Calendar
           id="endDate"
@@ -111,7 +112,7 @@ const AssignmentForm = ({ assignment, onClose }) => {
         />
       </div>
 
-      <div className="field">
+      <div className="form-group">
         <label htmlFor="status">Estado</label>
         <Dropdown
           id="status"
@@ -124,20 +125,21 @@ const AssignmentForm = ({ assignment, onClose }) => {
       </div>
 
       {error && (
-        <div className="p-error mb-3">{error}</div>
+        <div className="error-message">{error}</div>
       )}
 
-      <div className="flex gap-2 justify-end">
+      <div className="form-buttons">
         <Button
           label="Cancelar"
           icon="pi pi-times"
-          className="p-button-text"
+          className="btn-cancel"
           onClick={onClose}
           type="button"
         />
         <Button
           label="Guardar"
           icon="pi pi-check"
+          className="btn-save"
           loading={loading}
           type="submit"
         />

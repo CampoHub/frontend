@@ -1,0 +1,107 @@
+/* General styles for activity components */
+
+.activity-details {
+  background: var(--card-background);
+  box-shadow: var(--box-shadow);
+  border-radius: 10px;
+  padding: 2rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.filters-container {
+  background: var(--card-background);
+  border-radius: 8px;
+  padding: 1.2rem;
+  box-shadow: var(--box-shadow);
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+}
+
+.filters-container h3 {
+  color: var(--text-primary);
+  font-size: 1rem;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filters-form {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  flex: 1;
+  min-width: 180px;
+  max-width: 250px;
+}
+
+.filter-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.filter-group select {
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.form-container {
+  background: var(--card-background);
+  box-shadow: var(--box-shadow);
+  border-radius: 10px;
+  padding: 2rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.7rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn-primary {
+  background: var(--primary-color);
+  color: #fff;
+  border-radius: 6px;
+  border: none;
+  padding: 0.5rem 1.2rem;
+}
+
+.btn-cancel {
+  background: transparent;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+}

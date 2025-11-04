@@ -1,28 +1,22 @@
 import { useState, useEffect, useContext } from 'react';
 import { ActivitiesContext } from '../../context/ActivitiesContext';
-import { PlotsContext } from '../../context/PlotsContext';
+import './activities.css';
 
 const ActivityForm = ({ activity = null, onClose }) => {
-  const { addActivity, updateActivity } = useContext(ActivitiesContext);
-  const { plots } = useContext(PlotsContext);
   const [formData, setFormData] = useState({
     nombre: '',
     tipo: '',
-    id_parcela: '',
-    fecha_inicio: '',
-    fecha_fin: '',
     estado: ''
   });
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const { addActivity, updateActivity } = useContext(ActivitiesContext);
 
   useEffect(() => {
     if (activity) {
       setFormData({
         nombre: activity.nombre || '',
         tipo: activity.tipo || '',
-        id_parcela: activity.id_parcela || '',
-        fecha_inicio: activity.fecha_inicio?.split('T')[0] || '',
-        fecha_fin: activity.fecha_fin?.split('T')[0] || '',
         estado: activity.estado || ''
       });
     }
@@ -32,28 +26,10 @@ const ActivityForm = ({ activity = null, onClose }) => {
     const newErrors = {};
     if (!formData.nombre.trim()) newErrors.nombre = 'El nombre es obligatorio';
     if (!formData.tipo.trim()) newErrors.tipo = 'El tipo es obligatorio';
-    if (!formData.id_parcela) newErrors.id_parcela = 'La parcela es obligatoria';
-    if (!formData.fecha_inicio) newErrors.fecha_inicio = 'La fecha de inicio es obligatoria';
-    if (!formData.estado) newErrors.estado = 'El estado es obligatorio';
+    if (!formData.estado.trim()) newErrors.estado = 'El estado es obligatorio';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-
-    try {
-      if (activity) {
-        await updateActivity(activity.id, formData);
-      } else {
-        await addActivity(formData);
-      }
-      onClose();
-    } catch (error) {
-      console.error('Error al guardar la actividad:', error);
-    }
   };
 
   const handleChange = (e) => {
@@ -64,10 +40,35 @@ const ActivityForm = ({ activity = null, onClose }) => {
     }));
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    setLoading(true);
+    setErrors({});
+
+    try {
+      if (activity) {
+        await updateActivity(activity.id, formData);
+        alert('Actividad actualizada correctamente');
+      } else {
+        await addActivity(formData);
+        alert('Actividad creada correctamente');
+      }
+      onClose();
+    } catch (error) {
+      console.error('Error al guardar la actividad:', error);
+      setErrors({ submit: error.message || 'Error al guardar la actividad' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="form-container">
-      <div className="form-group">
-        <label htmlFor="nombre">Nombre:</label>
+    <form className="form-container" style={{ background: 'var(--card-background)', boxShadow: 'var(--box-shadow)', borderRadius: '10px', padding: '2rem', maxWidth: '400px', margin: '0 auto' }} onSubmit={handleSubmit}>
+      <h2 style={{ color: 'var(--primary-color)', fontWeight: 700, marginBottom: '1.5rem', fontSize: '1.3rem' }}>{activity ? 'Editar Actividad' : 'Nueva Actividad'}</h2>
+      <div className="form-group" style={{ marginBottom: '1rem' }}>
+        <label htmlFor="nombre" style={{ fontWeight: 500, color: 'var(--text-primary)' }}>Nombre:</label>
         <input
           type="text"
           id="nombre"
@@ -75,97 +76,88 @@ const ActivityForm = ({ activity = null, onClose }) => {
           value={formData.nombre}
           onChange={handleChange}
           className={errors.nombre ? 'error' : ''}
+          style={{ width: '100%', padding: '0.7rem', borderRadius: '6px', border: '1px solid var(--border-color)', marginTop: '0.3rem', fontSize: '1rem' }}
         />
-        {errors.nombre && <span className="error-message">{errors.nombre}</span>}
+        {errors.nombre && <span className="error-message" style={{ color: 'var(--danger-color)', fontSize: '0.9rem' }}>{errors.nombre}</span>}
       </div>
-
-      <div className="form-group">
-        <label htmlFor="tipo">Tipo:</label>
+      <div className="form-group" style={{ marginBottom: '1rem' }}>
+        <label htmlFor="tipo" style={{ fontWeight: 500, color: 'var(--text-primary)' }}>Tipo:</label>
         <select
           id="tipo"
           name="tipo"
           value={formData.tipo}
           onChange={handleChange}
           className={errors.tipo ? 'error' : ''}
+          style={{ width: '100%', padding: '0.7rem', borderRadius: '6px', border: '1px solid var(--border-color)', marginTop: '0.3rem', fontSize: '1rem' }}
         >
-          <option value="">Seleccione un tipo</option>
+          <option value="">Selecciona un tipo</option>
           <option value="Siembra">Siembra</option>
           <option value="Cosecha">Cosecha</option>
-          <option value="Fumigación">Fumigación</option>
           <option value="Riego">Riego</option>
-          <option value="Mantenimiento">Mantenimiento</option>
+          <option value="Fumigación">Fumigación</option>
         </select>
-        {errors.tipo && <span className="error-message">{errors.tipo}</span>}
+        {errors.tipo && <span className="error-message" style={{ color: 'var(--danger-color)', fontSize: '0.9rem' }}>{errors.tipo}</span>}
       </div>
-
-      <div className="form-group">
-        <label htmlFor="id_parcela">Parcela:</label>
-        <select
-          id="id_parcela"
-          name="id_parcela"
-          value={formData.id_parcela}
-          onChange={handleChange}
-          className={errors.id_parcela ? 'error' : ''}
-        >
-          <option value="">Seleccione una parcela</option>
-          {plots.map(plot => (
-            <option key={plot.id} value={plot.id}>
-              {plot.nombre}
-            </option>
-          ))}
-        </select>
-        {errors.id_parcela && <span className="error-message">{errors.id_parcela}</span>}
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="fecha_inicio">Fecha de inicio:</label>
-        <input
-          type="date"
-          id="fecha_inicio"
-          name="fecha_inicio"
-          value={formData.fecha_inicio}
-          onChange={handleChange}
-          className={errors.fecha_inicio ? 'error' : ''}
-        />
-        {errors.fecha_inicio && <span className="error-message">{errors.fecha_inicio}</span>}
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="fecha_fin">Fecha de fin:</label>
-        <input
-          type="date"
-          id="fecha_fin"
-          name="fecha_fin"
-          value={formData.fecha_fin}
-          onChange={handleChange}
-        />
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="estado">Estado:</label>
+      <div className="form-group" style={{ marginBottom: '1rem' }}>
+        <label htmlFor="estado" style={{ fontWeight: 500, color: 'var(--text-primary)' }}>Estado:</label>
         <select
           id="estado"
           name="estado"
           value={formData.estado}
           onChange={handleChange}
           className={errors.estado ? 'error' : ''}
+          style={{ width: '100%', padding: '0.7rem', borderRadius: '6px', border: '1px solid var(--border-color)', marginTop: '0.3rem', fontSize: '1rem' }}
         >
-          <option value="">Seleccione un estado</option>
+          <option value="">Selecciona un estado</option>
           <option value="pendiente">Pendiente</option>
           <option value="en progreso">En progreso</option>
           <option value="completada">Completada</option>
         </select>
-        {errors.estado && <span className="error-message">{errors.estado}</span>}
+        {errors.estado && <span className="error-message" style={{ color: 'var(--danger-color)', fontSize: '0.9rem' }}>{errors.estado}</span>}
       </div>
-
-      <div className="form-buttons">
-        <button type="button" className="btn btn-cancel" onClick={onClose}>
+      <div className="form-buttons" style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '2rem' }}>
+        <button 
+          type="submit" 
+          className="btn btn-primary" 
+          style={{ 
+            background: 'var(--primary-color)', 
+            color: '#fff', 
+            borderRadius: '6px', 
+            border: 'none', 
+            padding: '0.5rem 1.2rem',
+            opacity: loading ? 0.7 : 1,
+            cursor: loading ? 'not-allowed' : 'pointer'
+          }}
+          disabled={loading}
+        >
+          {loading ? 'Guardando...' : activity ? 'Actualizar' : 'Crear'}
+        </button>
+        <button 
+          type="button" 
+          className="btn btn-cancel" 
+          style={{ 
+            background: 'transparent', 
+            color: 'var(--primary-color)', 
+            border: '1px solid var(--primary-color)', 
+            borderRadius: '6px', 
+            padding: '0.5rem 1.2rem',
+            cursor: loading ? 'not-allowed' : 'pointer'
+          }} 
+          onClick={onClose}
+          disabled={loading}
+        >
           Cancelar
         </button>
-        <button type="submit" className="btn btn-save">
-          Guardar
-        </button>
       </div>
+      {errors.submit && (
+        <div className="error-message" style={{ 
+          color: 'var(--danger-color)', 
+          marginTop: '1rem', 
+          textAlign: 'center' 
+        }}>
+          {errors.submit}
+        </div>
+      )}
     </form>
   );
 };
