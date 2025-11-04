@@ -115,8 +115,24 @@ export const AssignmentsProvider = ({ children }) => {
     setFilters((prevFilters) => ({ ...prevFilters, ...newFilters }));
   };
 
+  // Filtrar asignaciones basado en los filtros actuales
+  const filteredAssignments = useMemo(() => {
+    return assignments.filter(assignment => {
+      // Para debugging
+      if (filters.activity) {
+        console.log('Filtro actividad:', filters.activity);
+        console.log('Actividad asignación:', assignment.activity?.tipo);
+      }
+
+      const matchesActivity = !filters.activity || 
+        (assignment.activity && assignment.activity.tipo === filters.activity);
+      const matchesStatus = !filters.status || assignment.status === filters.status;
+      return matchesActivity && matchesStatus;
+    });
+  }, [assignments, filters]);
+
   const value = React.useMemo(() => ({
-    assignments,
+    assignments: filteredAssignments,
     loading,
     error,
     filters,
