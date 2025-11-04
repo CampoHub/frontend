@@ -77,10 +77,10 @@ const Sidebar = () => {
           <i className="pi pi-user-edit"></i>
           <span>Mi Perfil</span>
         </Link>
-        <Link to="/configuracion" className="menu-item">
+        {/* <Link to="/configuracion" className="menu-item">
           <i className="pi pi-cog"></i>
           <span>Configuración</span>
-        </Link>
+        </Link> */}
         <Link
           className="menu-item"
           onClick={toggleTheme}
