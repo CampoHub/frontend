@@ -1,5 +1,5 @@
-import { createContext, useState } from "react";
-import api from "../services/api";
+import { createContext, useState, useCallback } from "react";
+import resourcesService from "../services/resources";
 
 export const ResourcesContext = createContext();
 
@@ -8,11 +8,11 @@ export const ResourcesProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const getResources = async () => {
+  const getResources = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await api.get('/resources');
-      setResources(response.data);
+      const data = await resourcesService.getAll();
+      setResources(data);
       setError(null);
     } catch (err) {
       setError('Error al cargar los recursos');
@@ -20,15 +20,15 @@ export const ResourcesProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const createResource = async (resourceData) => {
+  const createResource = useCallback(async (resourceData) => {
     try {
       setLoading(true);
-      const response = await api.post('/resources', resourceData);
-      setResources([...resources, response.data]);
+      const data = await resourcesService.create(resourceData);
+      setResources(prev => [...prev, data]);
       setError(null);
-      return response.data;
+      return data;
     } catch (err) {
       setError('Error al crear el recurso');
       console.error(err);
@@ -36,17 +36,17 @@ export const ResourcesProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const updateResource = async (id, resourceData) => {
+  const updateResource = useCallback(async (id, resourceData) => {
     try {
       setLoading(true);
-      const response = await api.put(`/resources/${id}`, resourceData);
-      setResources(resources.map(resource => 
-        resource.id === id ? response.data : resource
+      const data = await resourcesService.update(id, resourceData);
+      setResources(prev => prev.map(resource => 
+        resource.id === id ? data : resource
       ));
       setError(null);
-      return response.data;
+      return data;
     } catch (err) {
       setError('Error al actualizar el recurso');
       console.error(err);
@@ -54,13 +54,13 @@ export const ResourcesProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const deleteResource = async (id) => {
+  const deleteResource = useCallback(async (id) => {
     try {
       setLoading(true);
-      await api.delete(`/resources/${id}`);
-      setResources(resources.filter(resource => resource.id !== id));
+      await resourcesService.remove(id);
+      setResources(prev => prev.filter(resource => resource.id !== id));
       setError(null);
     } catch (err) {
       setError('Error al eliminar el recurso');
@@ -69,7 +69,7 @@ export const ResourcesProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const value = {
     resources,
