@@ -371,16 +371,18 @@ function App() {
                   </ActivitiesProvider>
                 }
               />
-              <Route
-                path="/recursos"
+              <Route 
+                path="/recursos" 
                 element={
-                  <ResourcesProvider>
-                    <Resources />
-                  </ResourcesProvider>
-                }
+                  <PlotsProvider>
+                    <ResourcesProvider>
+                      <Resources />
+                    </ResourcesProvider>
+                  </PlotsProvider>
+                } 
               />
-              <Route
-                path="/asignaciones"
+              <Route 
+                path="/asignaciones" 
                 element={
                   <ActivitiesProvider>
                     <AssignmentsProvider>
