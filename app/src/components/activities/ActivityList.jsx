@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react';
 import { ActivitiesContext } from '../../context/ActivitiesContext';
-import { useAuth } from '../../context/AuthContext';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import '../../layouts/dashboard/dashboard.css';
@@ -68,13 +67,8 @@ const ActivityReport = ({ activities }) => (
 
 const ActivityList = ({ activities, onEditActivity }) => {
   const { removeActivity } = useContext(ActivitiesContext);
-  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  
-  const isAdmin = user?.role === 'admin';
-  const isGestor = user?.role === 'gestor';
-  const canEdit = isAdmin || isGestor;
 
   const handleDelete = async (id) => {
     const activity = activities.find(a => a.id === id);
@@ -116,8 +110,6 @@ const ActivityList = ({ activities, onEditActivity }) => {
   };
 
   const actionBodyTemplate = (rowData) => {
-    if (!canEdit) return null;
-    
     return (
       <div className="flex gap-2">
         <button
@@ -128,16 +120,14 @@ const ActivityList = ({ activities, onEditActivity }) => {
           <i className="pi pi-pencil"></i>
           <span>Editar</span>
         </button>
-        {isAdmin && (
-          <button
-            className="btn btn-delete"
-            onClick={() => handleDelete(rowData.id)}
-            disabled={loading}
-          >
-            <i className="pi pi-trash"></i>
-            <span>Eliminar</span>
-          </button>
-        )}
+        <button
+          className="btn btn-delete"
+          onClick={() => handleDelete(rowData.id)}
+          disabled={loading}
+        >
+          <i className="pi pi-trash"></i>
+          <span>Eliminar</span>
+        </button>
       </div>
     );
   };

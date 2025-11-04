@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react';
 import { ActivitiesContext } from '../context/ActivitiesContext';
-import { useAuth } from '../context/AuthContext';
 import ActivityList from './activities/ActivityList';
 import ActivityForm from './activities/ActivityForm';
 import ActivityDetails from './activities/ActivityDetails';
@@ -9,14 +8,9 @@ import '../layouts/dashboard/dashboard.css';
 
 const Activities = () => {
   const { activities, loading, error } = useContext(ActivitiesContext);
-  const { user } = useAuth();
   const [showForm, setShowForm] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  
-  const isAdmin = user?.role === 'admin';
-  const isGestor = user?.role === 'gestor';
-  const canEdit = isAdmin || isGestor;
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -50,15 +44,13 @@ const Activities = () => {
           <div className="header-main">
             <div className="header-title">
               <h1>Gestión de Actividades</h1>
-              {canEdit && (
-                <button
-                  className="btn btn-primary"
-                  onClick={handleShowForm}
-                >
-                  <i className="pi pi-plus" style={{ marginRight: '0.5rem' }}></i>
-                  Nueva Actividad
-                </button>
-              )}
+              <button
+                className="btn btn-primary"
+                onClick={handleShowForm}
+              >
+                <i className="pi pi-plus" style={{ marginRight: '0.5rem' }}></i>
+                Nueva Actividad
+              </button>
             </div>
           </div>
         </div>

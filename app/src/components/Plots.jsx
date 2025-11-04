@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
 import { PlotsContext } from '../context/PlotsContext';
-import { useAuth } from '../context/AuthContext';
 import PlotList from './plots/PlotList';
 import PlotForm from './plots/PlotForm';
 import PlotDetails from './plots/PlotDetails';
@@ -12,13 +11,9 @@ import { Link } from 'react-router-dom';
 
 const Plots = () => {
   const { plots, loading, error, fetchPlots } = useContext(PlotsContext);
-  const { user } = useAuth();
   const [showForm, setShowForm] = useState(false);
   const [selectedPlot, setSelectedPlot] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const isAdmin = user?.role === 'admin';
-  const isGestor = user?.role === 'gestor';
-  const canEdit = isAdmin || isGestor;
 
   useEffect(() => {
     fetchPlots();
@@ -56,15 +51,13 @@ const Plots = () => {
           <div className="header-main">
             <div className="header-title">
               <h1>Gestión de Parcelas</h1>
-              {canEdit && (
-                <button
-                  className="btn btn-primary"
-                  onClick={handleShowForm}
-                >
-                  <i className="pi pi-plus" style={{ marginRight: '0.5rem' }}></i>
-                  Nueva Parcela
-                </button>
-              )}
+              <button
+                className="btn btn-primary"
+                onClick={handleShowForm}
+              >
+                <i className="pi pi-plus" style={{ marginRight: '0.5rem' }}></i>
+                Nueva Parcela
+              </button>
             </div>
           </div>
 
