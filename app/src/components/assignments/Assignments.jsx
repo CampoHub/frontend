@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { AssignmentsContext } from '../../context/AssignmentsContext';
+import { useAuth } from '../../context/AuthContext';
 import AssignmentList from './AssignmentList';
 import AssignmentForm from './AssignmentForm';
 import AssignmentDetails from './AssignmentDetails';
@@ -10,9 +11,14 @@ import '../../layouts/dashboard/dashboard.css';
 
 const Assignments = () => {
   const { assignments, loading, error, getAssignments } = useContext(AssignmentsContext);
+  const { user } = useAuth();
   const [showForm, setShowForm] = useState(false);
   const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  
+  const isAdmin = user?.role === 'admin';
+  const isGestor = user?.role === 'gestor';
+  const canEdit = isAdmin || isGestor;
 
   useEffect(() => {
     getAssignments();
@@ -50,13 +56,15 @@ const Assignments = () => {
           <div className="header-main">
             <div className="header-title">
               <h1>Gestión de Asignaciones</h1>
-              <button
-                className="btn btn-primary"
-                onClick={handleShowForm}
-              >
-                <i className="pi pi-plus" style={{ marginRight: '0.5rem' }}></i>
-                Nueva Asignación
-              </button>
+              {canEdit && (
+                <button
+                  className="btn btn-primary"
+                  onClick={handleShowForm}
+                >
+                  <i className="pi pi-plus" style={{ marginRight: '0.5rem' }}></i>
+                  Nueva Asignación
+                </button>
+              )}
             </div>
           </div>
 
