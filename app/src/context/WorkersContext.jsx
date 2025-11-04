@@ -22,6 +22,8 @@ export const WorkersProvider = ({ children }) => {
     }
   }, []);
 
+  const fetchWorkers = loadWorkers;
+
   const addWorker = async (workerData) => {
     try {
       setError(null);
@@ -76,7 +78,8 @@ export const WorkersProvider = ({ children }) => {
         addWorker,
         editWorker,
         removeWorker,
-        loadWorkers
+        loadWorkers,
+        fetchWorkers
       }}
     >
       {children}

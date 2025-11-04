@@ -353,32 +353,34 @@ function App() {
                   <PlotsProvider>
                     <ActivitiesProvider>
                       <AssignmentsProvider>
-                        <Activities />
-                        <Workers />
+                        <WorkersProvider>
+                          <Activities />
+                        </WorkersProvider>
                       </AssignmentsProvider>
                     </ActivitiesProvider>
                   </PlotsProvider>
                 }
               />
-              <Route 
-                path="/trabajadores" 
+              <Route
+                path="/trabajadores"
                 element={
                   <ActivitiesProvider>
-                    <AssignmentsProvider>
+                    <WorkersProvider>
                       <Workers />
-                    </AssignmentsProvider>
+                    </WorkersProvider>
                   </ActivitiesProvider>
-                } />
-                            <Route 
-                path="/recursos" 
+                }
+              />
+              <Route
+                path="/recursos"
                 element={
                   <ResourcesProvider>
                     <Resources />
                   </ResourcesProvider>
-                } 
+                }
               />
-              <Route 
-                path="/asignaciones" 
+              <Route
+                path="/asignaciones"
                 element={
                   <ActivitiesProvider>
                     <AssignmentsProvider>
@@ -389,7 +391,13 @@ function App() {
                   </ActivitiesProvider>
                 } />
               <Route path="/perfil" element={<Profile />} />
-              <Route path="/configuracion" element={<Dashboard />} />
+              {/* <Route path="/configuracion" element={<Dashboard />} /> */}
+
+              {/* <Route path="/dashboard/admin" element={<DashboardAdminLayout />}>
+                <Route path="reports" element={<ReportsLayout />} />
+                <Route path="settings" element={<SettingsLayout />} />
+              </Route> */}
+
             </Route>
 
             {/* Ruta protegida de administración de usuarios */}
