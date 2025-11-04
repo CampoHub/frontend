@@ -41,11 +41,17 @@ const Activities = () => {
       <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
       <main className="main-content">
         <div className="content-header">
-          <h1>Gestión de Actividades</h1>
-          <div style={{ display: 'flex', gap: '1rem' }}>
-            <button className="btn btn-primary" onClick={handleShowForm}>
-              Nueva Actividad
-            </button>
+          <div className="header-main">
+            <div className="header-title">
+              <h1>Gestión de Actividades</h1>
+              <button
+                className="btn btn-primary"
+                onClick={handleShowForm}
+              >
+                <i className="pi pi-plus" style={{ marginRight: '0.5rem' }}></i>
+                Nueva Actividad
+              </button>
+            </div>
           </div>
         </div>
 
@@ -64,15 +70,7 @@ const Activities = () => {
               />
             </div>
 
-            {showForm ? (
-              <div className="card form-card">
-                <h2>{selectedActivity ? 'Editar Actividad' : 'Nueva Actividad'}</h2>
-                <ActivityForm
-                  activity={selectedActivity}
-                  onClose={handleCloseForm}
-                />
-              </div>
-            ) : selectedActivity ? (
+            {selectedActivity && !showForm && (
               <div className="card details-card">
                 <h2>Detalles de la Actividad</h2>
                 <ActivityDetails
@@ -80,12 +78,17 @@ const Activities = () => {
                   onEdit={() => handleEditActivity(selectedActivity)}
                 />
               </div>
-            ) : (
-              <div className="card info-card">
-                <h2>Información</h2>
-                <p>Selecciona una actividad para ver sus detalles o crea una nueva.</p>
-              </div>
             )}
+          </div>
+        )}
+
+        {showForm && (
+          <div className="card form-card">
+            <h2>{selectedActivity ? 'Editar Actividad' : 'Nueva Actividad'}</h2>
+            <ActivityForm
+              activity={selectedActivity}
+              onClose={handleCloseForm}
+            />
           </div>
         )}
       </main>
