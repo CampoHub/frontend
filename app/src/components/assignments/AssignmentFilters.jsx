@@ -30,10 +30,13 @@ const AssignmentFilters = () => {
             onChange={handleFilterChange}
           >
             <option value="">Todas las actividades</option>
+            <option value="Preparación de suelo">Preparación de suelo</option>
             <option value="Siembra">Siembra</option>
-            <option value="Cosecha">Cosecha</option>
             <option value="Riego">Riego</option>
+            <option value="Fertilización">Fertilización</option>
             <option value="Fumigación">Fumigación</option>
+            <option value="Cosecha">Cosecha</option>
+            <option value="Mantenimiento">Mantenimiento</option>
           </select>
         </div>
 
