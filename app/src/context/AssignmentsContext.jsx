@@ -9,6 +9,7 @@ export const AssignmentsProvider = ({ children }) => {
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [filters, setFilters] = useState({ activity: '', status: '' });
   const { user } = useAuth();
 
   const getAssignments = useCallback(async () => {
@@ -110,26 +111,34 @@ export const AssignmentsProvider = ({ children }) => {
     }
   }, []);
 
+  const updateFilters = (newFilters) => {
+    setFilters((prevFilters) => ({ ...prevFilters, ...newFilters }));
+  };
+
   const value = React.useMemo(() => ({
     assignments,
     loading,
     error,
+    filters,
     getAssignments,
     getActivityAssignments,
     unassignWorker,
     deleteAssignment,
     createAssignment,
-    updateAssignment
+    updateAssignment,
+    updateFilters
   }), [
     assignments,
     loading,
     error,
+    filters,
     getAssignments,
     getActivityAssignments,
     unassignWorker,
     deleteAssignment,
     createAssignment,
-    updateAssignment
+    updateAssignment,
+    updateFilters
   ]);
 
   return (
