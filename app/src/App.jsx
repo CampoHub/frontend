@@ -39,6 +39,8 @@ import Assignments from "./components/assignments/Assignments";
 import Resources from "./components/resources/Resources";
 import { WorkersProvider } from "./context/WorkersContext";
 import { ResourcesProvider } from "./context/ResourcesContext";
+import ClaveOlvidada from "./components/ClaveOlvidada";
+import RessetPassword from "./components/RessetPassword";
 
 // Componente para rutas protegidas
 const ProtectedRoute = () => {
@@ -331,6 +333,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/inicio-sesion" element={<LoginForm />} />
             <Route path="/registro" element={<RegisterForm />} />
+            <Route path="/clave-olvidada" element={<ClaveOlvidada />} />
+            <Route path="/reset-password" element={<RessetPassword />} />
 
             {/* Rutas protegidas */}
             <Route element={<ProtectedRoute />}>
@@ -386,11 +390,6 @@ function App() {
                 } />
               <Route path="/perfil" element={<Profile />} />
               <Route path="/configuracion" element={<Dashboard />} />
-
-              {/* <Route path="/dashboard/admin" element={<DashboardAdminLayout />}>
-                <Route path="reports" element={<ReportsLayout />} />
-                <Route path="settings" element={<SettingsLayout />} />
-              </Route> */}
             </Route>
 
             {/* Ruta protegida de administración de usuarios */}
