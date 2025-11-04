@@ -1,13 +1,18 @@
 import { useContext, useState } from 'react';
 import { PlotsContext } from '../../context/PlotsContext';
+import { useAuth } from '../../context/AuthContext';
 import { getPlotImage } from '../../utils/plotImages';
 import '../../layouts/dashboard/dashboard.css';
 import './plots.css';
 
 const PlotList = ({ plots, onSelectPlot, onEditPlot }) => {
   const { removePlot } = useContext(PlotsContext);
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const isAdmin = user?.role === 'admin';
+  const isGestor = user?.role === 'gestor';
+  const canEdit = isAdmin || isGestor;
 
   const handleEdit = (plot, e) => {
     e.stopPropagation();
@@ -68,24 +73,28 @@ const PlotList = ({ plots, onSelectPlot, onEditPlot }) => {
                   <p>Tipo: {plot.tipo_cultivo}</p>
                   <p>Estado: {plot.estado}</p>
                 </div>
-                <div className="plot-actions">
-                  <button
-                    className="btn btn-edit"
-                    onClick={(e) => handleEdit(plot, e)}
-                    disabled={loading}
-                  >
-                    <i className="pi pi-pencil"></i>
-                    <span>Editar</span>
-                  </button>
-                  <button
-                    className="btn btn-delete"
-                    onClick={(e) => handleDelete(plot.id, e)}
-                    disabled={loading}
-                  >
-                    <i className="pi pi-trash"></i>
-                    <span>Eliminar</span>
-                  </button>
-                </div>
+                {canEdit && (
+                  <div className="plot-actions">
+                    <button
+                      className="btn btn-edit"
+                      onClick={(e) => handleEdit(plot, e)}
+                      disabled={loading}
+                    >
+                      <i className="pi pi-pencil"></i>
+                      <span>Editar</span>
+                    </button>
+                    {isAdmin && (
+                      <button
+                        className="btn btn-delete"
+                        onClick={(e) => handleDelete(plot.id, e)}
+                        disabled={loading}
+                      >
+                        <i className="pi pi-trash"></i>
+                        <span>Eliminar</span>
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           ))}
